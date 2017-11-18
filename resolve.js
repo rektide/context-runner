@@ -1,3 +1,5 @@
+"use module"
+
 /**
   Resolve a real value from any nested promises and functions
 */
@@ -9,7 +11,7 @@ async function resolve( o, def, arg, thisArg){
 		o= await o
 	}while( o instanceof Function|| o&& o.then)
 	if( !o&& def){
-		return evaluate( def, undefined, arg, thisArg)
+		return resolve( def, undefined, arg, thisArg)
 	}
 	return o
 }

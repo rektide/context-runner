@@ -10,7 +10,14 @@
 		"type": "git",
 		"url": "https://archive.voodoowarez.com/context-runner"
 	},
-	"keywords": ["context"],
+	"keywords": [
+		"context"
+	],
 	"author": "rektide de la faye",
-	"license": "MIT"
+	"license": "MIT",
+	"es:next": true,
+	"module": true,
+	"@std/esm": {
+		"esm": "js"
+	}
 }

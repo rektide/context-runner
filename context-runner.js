@@ -1,6 +1,7 @@
+"use module"
 "use strict"
 
-import _resolve "./resolve.js"
+import _resolve from "./resolve.js"
 
 /**
   In order, `key` on `ctx`, turning it's aswith `defaults` if context 
