@@ -3,6 +3,21 @@
 
 import _resolve from "./resolve.js"
 
+function defer(){
+	var
+	  _reject,
+	  _resolve,
+	  promise= new Promise(function( resolve, reject){
+		_resolve= resolve
+		_reject= reject
+	  })
+	Object.defineProperties( promise, {
+		resolve: { value: _resolve},
+		reject: { value: _reject}
+	})
+	return promise
+}
+
 /**
   In order, `key` on `ctx`, turning it's aswith `defaults` if context 
 */
@@ -22,8 +37,15 @@ export default async function( ctx, defaults, contextRun){
 	// 3. Fallback for order of keys in defaults
 	contextRun= await contextRun|| await contextResolve( ctx.contextRun, defaults.contextRun, ctx)|| Object.keys( defaults)
 	for( var run of contextRun){
-		// Resolve this piece, and assign the resolved value back on the run-context.
-		ctx[ run]= await contextResolve( ctx[ run], defaults[ run], ctx)
+		ctx[ run]= defer()
+	}
+	for( var run of contextRun){
+		// Begin the run for this piece
+		var execution= contextResolve( ctx[ run], defaults[ run], ctx)
+		// When done, resolve the value back on to the run-context
+		execution.then( execution=> this[ run].resolve( execution); this[ run]= execution)
+		// Resolve this piece
+		await execution
 	}
 	return ctx
 }

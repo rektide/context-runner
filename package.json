@@ -1,6 +1,6 @@
 {
 	"name": "context-runner",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "In-order means of concretizing asynchronous members of a context.",
 	"main": "context-runner.js",
 	"scripts": {
