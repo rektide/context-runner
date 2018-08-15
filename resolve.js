@@ -10,7 +10,7 @@ async function resolve( o, def, arg, thisArg){
 		}
 		o= await o
 	}while( o instanceof Function|| o&& o.then)
-	if( !o&& def){
+	if( o=== undefined&& def){
 		return resolve( def, undefined, arg, thisArg)
 	}
 	return o

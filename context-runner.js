@@ -36,9 +36,22 @@ export default async function( ctx, defaults, contextRun){
 	// 2. Look for a contextRun property that specifies if available
 	// 3. Fallback for order of keys in defaults
 	contextRun= await contextRun|| await contextResolve( ctx.contextRun, defaults.contextRun, ctx)|| Object.keys( defaults)
-	for( var run of contextRun){
-		ctx[ run]= defer()
+	// predefine every element so everyone can depend on this ctx items. run no functions (hich might be async).
+	for( const run of contextRun){
+		if( ctx[ run]!== undefined){
+			// already defined, next
+			continue
+		}
+		const def= defaults[ run]
+		if( defaults[ run] instanceof Function){
+			// allow others to depend on the eventual value of this function
+			ctx[ run]= defer()
+		}else{
+			// defaults is a concrete value already, assign it
+			ctx[ run]= def
+		}
 	}
+	// really run through each item
 	for( var run of contextRun){
 		// Begin the run for this piece
 		var execution= contextResolve( ctx[ run], defaults[ run], ctx)
